@@ -44,9 +44,9 @@ class Solution {
 		int nums2Pointer = n - 1;
 		int nums1LastPointer = nums1.length - 1;
 
-		while (nums1Pointer >= 0 && nums2Pointer >= 0) {
+		while (nums2Pointer >= 0) {
 
-			if (nums1[nums1Pointer] > nums2[nums2Pointer]) {
+			if (nums1Pointer >= 0 && nums1[nums1Pointer] > nums2[nums2Pointer]) {
 				nums1[nums1LastPointer] = nums1[nums1Pointer];
 				nums1Pointer--;
 			} else {
@@ -57,12 +57,5 @@ class Solution {
 			nums1LastPointer--;
 
 		}
-
-		while (nums2Pointer >= 0) {
-			nums1[nums1LastPointer] = nums2[nums2Pointer];
-			nums2Pointer--;
-			nums1LastPointer--;
-		}
-
     }
 }
