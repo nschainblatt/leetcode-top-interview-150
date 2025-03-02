@@ -40,60 +40,29 @@ public class Main {
 class Solution {
     public void merge(int[] nums1, int m, int[] nums2, int n) {
 
-		if (nums2.length == 0) {
-			return;
+		int nums1Pointer = m - 1;
+		int nums2Pointer = n - 1;
+		int nums1LastPointer = nums1.length - 1;
+
+		while (nums1Pointer >= 0 && nums2Pointer >= 0) {
+
+			if (nums1[nums1Pointer] > nums2[nums2Pointer]) {
+				nums1[nums1LastPointer] = nums1[nums1Pointer];
+				nums1Pointer--;
+			} else {
+				nums1[nums1LastPointer] = nums2[nums2Pointer];
+				nums2Pointer--;
+			}
+
+			nums1LastPointer--;
+
 		}
 
-		int nums2Pointer = 0;
-		int nums1RealNumberCounter = m;
-
-		for (int i = 0; i < nums1.length; i++) {
-
-			if (nums2Pointer > nums2.length - 1) {
-				break;
-			}
-
-			int num1 = nums1[i];
-			int num2 = nums2[nums2Pointer];
-
-			if (nums1RealNumberCounter > 0) {
-				nums1RealNumberCounter--;
-			}
-
-			if (num2 <= num1) {
-				shift(nums1, i);
-				nums1[i] = num2;
-				nums1RealNumberCounter++;
-				nums2Pointer++;
-
-			} else if (num1 == 0 && nums1RealNumberCounter == 0) {
-				// Reached zeroes
-				nums1[i] = num2;
-				nums2Pointer++;
-			}
-
-
-
+		while (nums2Pointer >= 0) {
+			nums1[nums1LastPointer] = nums2[nums2Pointer];
+			nums2Pointer--;
+			nums1LastPointer--;
 		}
 
     }
-
-
-    public void shift(int[] nums1, int start) {
-		// nums1: 1, 2, 3, 0, 0, 0
-		// start: 1
-		// nums1: 1, 0, 2, 3, 0, 0 (after shift)
-
-		for (int i = nums1.length - 1; i > start; i--) {
-			swap(nums1, i, i - 1);
-		}
-
-
-    }
-
-   public void swap(int[] array, int i, int j) {
-		int tmp = array[i];
-		array[i] = array[j];
-		array[j] = tmp;
-	}
 }
