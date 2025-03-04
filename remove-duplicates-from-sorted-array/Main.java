@@ -17,21 +17,13 @@ class Solution {
                 }
 
                 int uniquePointer = 1;
-                int currentUniqueNumber = nums[0];
                 for (int i = 1; i < nums.length; i++) {
-                        if (nums[i] != currentUniqueNumber) {
-                                currentUniqueNumber = nums[i];
-                                swap(nums, i, uniquePointer);
+                        if (nums[i] != nums[i-1]) {
+                                nums[uniquePointer] = nums[i];
                                 uniquePointer++;
                         }
                 }
 
                 return uniquePointer;
     }
-
-        private void swap(int[] array, int i, int j) {
-                int tmp = array[i];
-                array[i] = array[j];
-                array[j] = tmp;
-        }
 }
