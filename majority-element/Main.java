@@ -12,18 +12,22 @@ public class Main {
 class Solution {
 	public int majorityElement(int[] nums) {
 
-		Map<Integer, Integer> countMap = new HashMap<>();
+		int count = 0;
+		int value = nums[0];
 
 		for (int num : nums) {
-			if (countMap.containsKey(num)) {
-				countMap.put(num, countMap.get(num)+1);
+			if (num == value) {
+				count++;
 			} else {
-				countMap.put(num, 1);
+				count--;
+				if (count == -1) {
+					value = num;
+					count = 1;
+				}
 			}
-			if (countMap.get(num) >= nums.length / 2.0) {
-				return num;}
+
 		}
 
-		return -1;
+		return value;
 	}
 }
