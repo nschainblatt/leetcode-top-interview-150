@@ -12,17 +12,15 @@ public class Main {
 class Solution {
 	public int maxProfit(int[] prices) {
 		int profit = 0;
-		int minPointer = 0;
-		int maxPointer = 1;
+		int leftPointer = 0;
 
-		while (maxPointer < prices.length) {
-			if (prices[minPointer] < prices[maxPointer]) {
-				profit = Math.max(profit, prices[maxPointer] - prices[minPointer]);
-			} else {
-				minPointer = maxPointer;
+		for (int rightPointer = 1; rightPointer < prices.length; rightPointer++) {
+			profit = Math.max(prices[rightPointer] - prices[leftPointer], profit);
+			if (prices[rightPointer] < prices[leftPointer]) {
+				leftPointer = rightPointer;
 			}
-			maxPointer++;
 		}
-		return profit;
+
+		return Math.max(profit, 0);
 	}
 }
