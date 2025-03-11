@@ -28,17 +28,13 @@ public class Main {
 class Solution {
 	public int lengthOfLastWord(String s) {
 		int length = 0;
-
-		boolean inWord = false;
 		for (int i = s.length() - 1; i >= 0; i--) {
-			if (!inWord && s.charAt(i) == ' ') {
+			if (length == 0 && s.charAt(i) == ' ') {
 				continue;
-			} else if (s.charAt(i) != ' ') {
-				inWord = true;
-				length++;
-			} else if (inWord && s.charAt(i) == ' ') {
-				inWord = false;
+			} else if (length != 0 && s.charAt(i) == ' ') {
 				break;
+			} else {
+				length++;
 			}
 		}
 
