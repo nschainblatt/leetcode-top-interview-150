@@ -27,17 +27,7 @@ public class Main {
 
 class Solution {
 	public int lengthOfLastWord(String s) {
-		int length = 0;
-		for (int i = s.length() - 1; i >= 0; i--) {
-			if (length == 0 && s.charAt(i) == ' ') {
-				continue;
-			} else if (length != 0 && s.charAt(i) == ' ') {
-				break;
-			} else {
-				length++;
-			}
-		}
-
-		return length;
+		String[] arr = s.split(" ");
+		return arr[arr.length - 1].length();
 	}
 }
