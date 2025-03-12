@@ -39,11 +39,8 @@ class Solution {
 		int needlePointer = 0;
 		int beginningMarker = -1;
 
-		for (int i = 0; i < haystack.length() && needlePointer < needle.length(); i++) {
-
-			System.out.println("h: " + haystack.charAt(i));
-			System.out.println("n: " + needle.charAt(needlePointer));
-			System.out.println("beginning marker " + beginningMarker);
+		int i = 0;
+		while (i < haystack.length() && needlePointer < needle.length()) {
 
 			if (haystack.charAt(i) == needle.charAt(needlePointer)) {
 				if (beginningMarker == -1) {
@@ -53,16 +50,14 @@ class Solution {
 				needlePointer++;
 			} else {
 				if (beginningMarker != -1) {
-					System.out.println("setting i to: " + haystack.charAt(beginningMarker + 1));
-					i = beginningMarker; //NOTE not adding 1 here because it will get added next iteration of for loop
+					i = beginningMarker;
 				}
 
 				needlePointer = 0;
 				beginningMarker = -1;
 			}
 
-
-
+			i++;
 		}
 
 		return needlePointer != needle.length() ? -1 : beginningMarker;
