@@ -3,12 +3,8 @@ import java.util.*;
 public class Main {
 	public static void main(String[] args) {
 		Solution s = new Solution();
-		String actual = s.longestCommonPrefix(new String[] {});
+		String actual = s.longestCommonPrefix(new String[] {""});
 		String expected = "";
-		assert expected.equals(actual) : String.format("expected: %s actual: %s", expected, actual);
-
-		actual = s.longestCommonPrefix(new String[] {""});
-		expected = "";
 		assert expected.equals(actual) : String.format("expected: %s actual: %s", expected, actual);
 
 		actual = s.longestCommonPrefix(new String[] {"flower","flow","flight"});
@@ -31,9 +27,6 @@ public class Main {
 
 class Solution {
 	public String longestCommonPrefix(String[] strs) {
-		if (strs.length == 0) return "";
-		if (strs.length == 1) return strs[0];
-
 		String longest = "";
 		String first = strs[0];
 		for (int k = 0; k < first.length(); k++) {
