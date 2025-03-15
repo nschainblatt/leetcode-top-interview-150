@@ -40,49 +40,24 @@ public class Main {
 }
 
 class Solution {
-	public void rotate(int[] nums, int k) {
+    public void rotate(int[] nums, int k) {
+        k = k % nums.length;
+        reverse(nums, 0, nums.length - 1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, nums.length - 1);
+    }
 
-		if (nums.length == 1) return;
+    public void reverse(int[] array, int start, int end) {
+        while (start < end) {
+            swap(array, start, end);
+            start++;
+            end--;
+        }
+    }
 
-		k = k%nums.length;
-
-		int count = 0;
-		int index = 0;
-		int prev = nums[0];
-
-		// Reverse entire array
-		reverse(nums);
-
-		// Reverse 0:k-1
-		reverse(nums, 0, k - 1);
-
-		// Reverse k:last-index
-		reverse(nums, k, nums.length - 1);
-	}
-
-	public void reverse(int[] array) {
-		int left = 0;
-		int right = array.length - 1;
-		while (left < right) {
-			swap(array, left, right);
-			left++;
-			right--;
-		}
-	}
-
-	public void reverse(int[] array, int start, int end) {
-		while (start < end) {
-			swap(array, start, end);
-			start++;
-			end--;
-		}
-	}
-
-	public void swap(int[] array, int i , int j) {
-		if (array[i] == array[j]) return;
-		array[i] = array[i] ^ array[j];
-		array[j] = array[i] ^ array[j];
-		array[i] = array[i] ^ array[j];
-	}
-
+    public void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
 }
