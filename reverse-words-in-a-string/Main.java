@@ -4,7 +4,7 @@ public class Main {
 	public static void main(String[] args) {
 		Solution s = new Solution();
 
-		String input = "  hello world  ";
+		String input = "  hello    world  ";
 		String expected = "world hello";
 		String actual = s.reverseWords(input);
 		assert expected.equals(actual) : String.format("expected: '%s' actual: '%s'", expected, actual);
@@ -21,32 +21,22 @@ public class Main {
 
 class Solution {
 	public String reverseWords(String s) {
-		StringBuilder builder = new StringBuilder();
-		int left = -1;
-		int right = -1;
-
-		for (int i = 0; i < s.length(); i++) {
-			char curr = s.charAt(i);
-			if (curr == ' ') {
-				if (right != -1) { // encountered a space and right is set, were in a word
-					builder.insert(0, s.substring(left, right+1) + " ");
-					left = -1;
-					right = -1;
-				}
-				continue;
-			} else {
-				// in a word
-				right = i;
-				if (left == -1) { // only set left at the beginning of a word
-					left = i;
-				}
-			}
-		}
-
-		if (left != -1 && right != -1) { // add any leftover if the last word didn't have a space after it
-			builder.insert(0, s.substring(left, right+1) + " ");
-		}
-
-		return builder.toString().trim();
+		String[] array = Arrays.stream(s.trim().split(" ")).filter(t -> !t.isEmpty()).toArray(String[]::new);
+		reverse(array);
+		return String.join(" ", array);
 	}
+
+
+	public void reverse(String[] array) {
+		int start = 0;
+		int end = array.length-1;
+		while (start < end) {
+			String temp = array[start];
+			array[start] = array[end];
+			array[end] = temp;
+			start++;
+			end--;
+		}
+	}
+
 }
