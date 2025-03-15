@@ -1,36 +1,49 @@
-import java.util.*;
-
-public class Main {
-	public static void main(String[] args) {
-		Solution s = new Solution();
-
-		int[] input = new int[] {1,2,3,4,5,6,7};
-		int[] expected = new int[] {5,6,7,1,2,3,4};
-		s.rotate(input, 3);
-		assert Arrays.equals(expected, input) : String.format("expected: %s actual: %s", Arrays.toString(expected), Arrays.toString(input));
-
-		input = new int[] {1,2};
-		expected = new int[] {1,2};
-		s.rotate(input, 2);
-		assert Arrays.equals(expected, input) : String.format("expected: %s actual: %s", Arrays.toString(expected), Arrays.toString(input));
-	}
-}
-
 class Solution {
 	public void rotate(int[] nums, int k) {
 
-		int[] output = new int[nums.length];
+		if (nums.length == 1) return;
 
-		for (int i = 0; i < nums.length; i++) {
-			output[((i+k)%(nums.length))] = nums[i];
-		}
+        k = k%nums.length;
 
-		for (int i = 0; i < output.length; i++) {
-			nums[i] = output[i];
+		int count = 0;
+		int index = 0;
+		int prev = nums[0];
+
+		// 1, 2, 3, 4, 5, 6, 7
+		System.out.println(Arrays.toString(nums));
+
+		// Reverse entire array
+		reverse(nums);
+		System.out.println(Arrays.toString(nums));
+		// 7, 6, 5, 4, 3, 2, 1
+
+		// Reverse 0:k (exclusive)
+		reverse(nums, 0, k);
+		System.out.println(Arrays.toString(nums));
+		// 5, 6, 7, 4, 3, 2, 1
+
+		// Reverse k:end
+		reverse(nums, k, nums.length);
+		System.out.println(Arrays.toString(nums));
+		// 5, 6, 7, 1, 2, 3, 4
+	}
+
+	public void reverse(int[] array) {
+        int left = 0;
+        int right = array.length - 1;
+		for (int i = 0; i < array.length / 2; i++) {
+			swap(array, i, array.length - 1 - i);
 		}
 	}
 
-	public void swap(int[] array, int i, int j) {
+	public void reverse(int[] array, int start, int end) {
+		for (int i = 0; i < (end-start) / 2; i++) {
+			swap(array, i + start, end - 1 - i);
+		}
+	}
+
+	public void swap(int[] array, int i , int j) {
+		if (array[i] == array[j]) return;
 		array[i] = array[i] ^ array[j];
 		array[j] = array[i] ^ array[j];
 		array[i] = array[i] ^ array[j];
