@@ -11,21 +11,18 @@ public class Main {
 
 class Solution {
 	public boolean isValid(String s) {
-
 		Stack<Character> stack = new Stack<>();
+		Map<Character, Character> bracketMap = new HashMap<>();
+		bracketMap.put('(',')');
+		bracketMap.put('{','}');
+		bracketMap.put('[',']');
 
 		for (int i = 0; i < s.length(); i++) {
 			char bracket = s.charAt(i);
-			if (bracket == '(' || bracket == '{' || bracket == '[') {
+			if (bracketMap.containsKey(bracket)) {
 				stack.push(bracket);
-			} else {
-				if (stack.isEmpty()) {
-					return false;
-				}
-				char openingBracket = stack.pop();
-				if ((bracket == ')' && openingBracket != '(') || (bracket == '}' && openingBracket != '{') || (bracket == ']' && openingBracket != '[')) {
-					return false;
-				}
+			} else if (stack.isEmpty() || bracket != bracketMap.get(stack.pop())) {
+				return false;
 			}
 		}
 
