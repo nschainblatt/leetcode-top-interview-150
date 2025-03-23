@@ -1,63 +1,51 @@
 import java.util.*;
 
-// TODO:
-// Next step is to optimize the load factor:
-// Increase the size of the underlying array whenever the load factor gets too high, you will also have to rehash every element becuase
-// the ArrayList size changes.
-// Improve the getRandom method by including probabilities between buckets (buckets with higher number of elements have a higher chance of getting randomly selected), I am not sure how much this part matters, we may be able to get away with just randomly choosing a bucket that isn't random, and then randomly choosing a element in that bucket.
-
 public class Main {
 	public static void main(String[] args) {
 
 		RandomizedSet obj = new RandomizedSet();
 
-		//boolean param_1 = obj.insert(1);
-		//boolean param_2 = obj.remove(2);
-		//boolean param_3 = obj.insert(2);
-		//int param_4 = obj.getRandom();
-		//boolean param_5 = obj.remove(1);
-		//boolean param_6 = obj.insert(2);
-		//int param_7 = obj.getRandom();
-
-		//assert param_1;
-		//assert !param_2;
-		//assert param_3;
-		//assert param_5;
-		//assert !param_6;
-
-		assert obj.insert(1);
-		assert obj.insert(2);
-		assert obj.insert(3);
-		assert obj.insert(4);
-		assert obj.insert(5);
-		assert obj.insert(6);
-		assert obj.insert(7);
-
+		for (int i = 100; i > 0; i--) {
+			if (i % 10 == 0) {
+				obj.print();
+			}
+			assert obj.insert(i);
+		}
 		assert obj.insert(-1);
 		obj.print();
 
-
+		assert obj.contains(-1);
+		assert obj.contains(100);
+		assert obj.remove(100);
+		assert obj.remove(-1);
+		assert !obj.contains(100);
+		assert !obj.contains(-1);
+		obj.print();
 
 		System.out.println(obj.getRandom());
 
 	}
 }
 
-
 class RandomizedSet {
 
-	private final List<List<Integer>> bucketHolder = new ArrayList<>();
+	private List<List<Integer>> bucketHolder = new ArrayList<>();
 	private final int defaultSize = 16;
+	private int entryCount = 0;
+	private final double maxLoadFactor = 0.75;
 	private final Random r = new Random();
 
 	public void print() {
-		System.out.println(bucketHolder);
+		System.out.printf("Buckets: %d, Entries: %d, Load Factor: %f, Data: %s\n", bucketHolder.size(),
+				entryCount, getLoadFactor(), bucketHolder);
 	}
 
 	public RandomizedSet() {
-		for (int i = 0; i < defaultSize; i++) {
-			bucketHolder.add(new ArrayList<>());
-		}
+		expandBucketHolder(defaultSize);
+	}
+
+	private double getLoadFactor() {
+		return entryCount / (double) bucketHolder.size();
 	}
 
 	public boolean insert(int val) {
@@ -69,7 +57,36 @@ class RandomizedSet {
 			}
 		}
 		bucket.add(val);
+		entryCount++;
+		// Check if we need to expand and re-hash
+		if (getLoadFactor() > maxLoadFactor) {
+			expandBucketHolder(bucketHolder.size());
+			rehash();
+		}
 		return true;
+	}
+
+	private void expandBucketHolder(int size) {
+		for (int i = 0; i < size; i++) {
+			bucketHolder.add(new ArrayList<>());
+		}
+	}
+
+	private void rehash() {
+		List<List<Integer>> newBucketHolder = new ArrayList<>();
+		for (int i = 0; i < bucketHolder.size(); i++) {
+			newBucketHolder.add(new ArrayList<>());
+		}
+
+		for (List<Integer> bucket : bucketHolder) {
+			for (int val : bucket) {
+				int hashKey = hashValue(val);
+				List<Integer> newBucket = newBucketHolder.get(hashKey);
+				newBucket.add(val);
+			}
+		}
+
+		bucketHolder = new ArrayList<>(newBucketHolder);
 	}
 
 	public boolean remove(int val) {
@@ -78,6 +95,7 @@ class RandomizedSet {
 		for (int i = 0; i < bucket.size(); i++) {
 			if (bucket.get(i) == val) {
 				bucket.remove(i);
+				entryCount--;
 				return true;
 			}
 		}
@@ -118,4 +136,3 @@ class RandomizedSet {
 		return value % bucketHolder.size();
 	}
 }
-
