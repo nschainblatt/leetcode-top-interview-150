@@ -16,28 +16,14 @@ public class Main {
 
 class Solution {
 	public boolean canJump(int[] nums) {
-		Stack<Integer> stack = new Stack<>();
-		Set<Integer> visited = new HashSet<>();
-		stack.push(0);
+        int target = nums.length - 1;
 
-		while (!stack.isEmpty()) {
-			int currIndex = stack.pop();
-			if (visited.contains(currIndex)) {
-				continue;
-			}
-
-			if (currIndex == nums.length - 1) {
-				return true;
-			}
-			for (int j = 1; j <= nums[currIndex]; j++) {
-				int i = currIndex + j;
-				if (i < nums.length) {
-					stack.push(i);
-				}
-			}
-			visited.add(currIndex);
-		}
-
-		return false;
+        for (int i = target-1; i >=0; i--) {
+            if (i + nums[i] >= target)  {
+                target = i;
+            }
+        }
+        
+        return target == 0;
 	}
 }
