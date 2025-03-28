@@ -32,38 +32,29 @@ public class Main {
 
 class Solution {
 	public int canCompleteCircuit(int[] gas, int[] cost) {
-		if (gas.length == 1 && cost[0] <= gas[0]) {
-			return 0;
+		int gasSum = 0;
+		int costSum = 0;
+		for (int i = 0; i < gas.length; i++) {
+			gasSum += gas[i];
+			costSum += cost[i];
 		}
 
+		if (gasSum < costSum) {
+			return -1;
+		}
+
+		// At this point we know there is a solution guranteed
 		int start = 0;
-		while (start < gas.length) { // give every gas station a chance to be the startin point until a solution
-						// is found or the end is reached
-			int tank = gas[start];
-			int price = cost[start];
+		int tank = 0;
 
-			int current = (start + 1) % gas.length;
-			while (current != start) { // go through clockwise from the start
-				tank -= price;
-				if (tank < 0) {
-					break;
-				}
-				tank += gas[current];
-
-				price = cost[current];
-				current = (current + 1) % gas.length;
-			}
-			if (current == start && tank - price >= 0) {
-				return start;
-			}
-
-			if (current > start) {
-				start = current;
-			} else {
-				break;
+		for (int current = start; current < gas.length; current++) {
+			tank += gas[current] - cost[current];
+			if (tank < 0) {
+				tank = 0;
+				start = current + 1;
 			}
 		}
 
-		return -1;
+		return start;
 	}
 }
