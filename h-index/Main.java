@@ -32,22 +32,17 @@ class Solution {
 		int[] paperCounts = new int[citations.length + 1];
 
 		for (int citation : citations) {
-			if (citation > paperCounts.length - 1) {
-				paperCounts[paperCounts.length - 1]++;
-			} else {
-				paperCounts[citation]++;
-			}
+			paperCounts[Math.min(paperCounts.length - 1, citation)]++;
 		}
 
-		int citationSum = 0;
-		for (int i = paperCounts.length - 1; i > 0; i--) {
-			citationSum += paperCounts[i];
+		int h = paperCounts.length - 1; // Represents the cited count
+		int paperCounter = paperCounts[h]; // Papers with this exact cited count
 
-			if (citationSum >= i) {
-				return i;
-			}
+		while (paperCounter < h) {
+			h--;
+			paperCounter += paperCounts[h];
 		}
 
-		return 0;
+		return h;
 	}
 }
