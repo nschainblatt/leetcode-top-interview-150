@@ -11,60 +11,43 @@ public class Main {
 		actual = s.hIndex(citations);
 		assert 3 == actual : actual;
 
-		citations = new int[] { 0, 0, 0, 0, 0 }
-		;
+		citations = new int[] { 0, 0, 0, 0, 0 };
 		actual = s.hIndex(citations);
 		assert 0 == actual : actual;
+
+		citations = new int[] { 11, 15 };
+		actual = s.hIndex(citations);
+		assert 2 == actual : actual;
+
+		citations = new int[] { 0, 0, 2 };
+		actual = s.hIndex(citations);
+		assert 1 == actual : actual;
 
 	}
 }
 
-// First sort the array in ascending order
-//
-// Then go over every citations, get it's value
-//
-// If the value isn't zerio, is greater than the current max, and the amount of
-// reports with this value or greater is also greater than the max, then update
-// the max
-//
-// This isn't the most optimal solution, but is the easiest solution that first
-// came to mind, will explore other options later.
-
 class Solution {
 	public int hIndex(int[] citations) {
 
-		if (citations.length == 1) {
-			return Math.min(citations[0], 1);
-		}
+		int[] paperCounts = new int[citations.length + 1];
 
-		bubblesort(citations);
-
-		int max = 0;
-
-		// citations.length - i > max (this includes the current element in the answer)
-		for (int i = 0; i < citations.length; i++) {
-			if (citations[i] > max && citations.length - i > max) {
-				max = Math.min(citations[i], citations.length - i);
+		for (int citation : citations) {
+			if (citation > paperCounts.length - 1) {
+				paperCounts[paperCounts.length - 1]++;
+			} else {
+				paperCounts[citation]++;
 			}
 		}
 
-		return max;
-	}
+		int citationSum = 0;
+		for (int i = paperCounts.length - 1; i > 0; i--) {
+			citationSum += paperCounts[i];
 
-	private void bubblesort(int a[]) {
-		// sort asc
-		for (int i = 0; i < a.length; i++) {
-			for (int j = 0; j < a.length - i - 1; j++) {
-				if (a[j + 1] < a[j]) {
-					swap(a, j + 1, j);
-				}
+			if (citationSum >= i) {
+				return i;
 			}
 		}
-	}
 
-	private void swap(int[] a, int i, int j) {
-		int t = a[i];
-		a[i] = a[j];
-		a[j] = t;
+		return 0;
 	}
 }
