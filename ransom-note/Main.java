@@ -9,19 +9,16 @@ public class Main {
 
 class Solution {
 	public boolean canConstruct(String ransomNote, String magazine) {
-		Map<Character, Integer> characterCount = new HashMap<>();
+		int[] characterCounter = new int[26];
 		int i;
-		char c;
-
 		for (i = 0; i < magazine.length(); i++) {
-			c = magazine.charAt(i);
-			characterCount.merge(c, 1, Integer::sum);
+			characterCounter[magazine.charAt(i) - 'a']++;
 		}
-
 		for (i = 0; i < ransomNote.length(); i++) {
-			if (characterCount.compute(ransomNote.charAt(i), (k, v) -> (v == null) ? -1 : v - 1) == -1) {
+			if (characterCounter[ransomNote.charAt(i) - 'a'] == 0) {
 				return false;
 			}
+			characterCounter[ransomNote.charAt(i) - 'a']--;
 		}
 
 		return true;
