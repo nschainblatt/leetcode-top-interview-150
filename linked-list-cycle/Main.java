@@ -7,6 +7,9 @@ public class Main {
         ListNode linkedList = new ListNode(1, new ListNode(2, tail));
         tail.next = linkedList;
         assert s.hasCycle(linkedList);
+
+        linkedList = new ListNode(1, new ListNode(2));
+        assert !s.hasCycle(linkedList);
     }
 }
 
@@ -27,17 +30,13 @@ class ListNode {
 
 class Solution {
     public boolean hasCycle(ListNode head) {
-        ListNode current = head;
-        ListNode previous = null; // NOTE: we need the previous because we don't want to overwrite current.next
-        while (current != null) {
-            if (current == current.next) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast)
                 return true;
-            }
-            if (previous != null) {
-                previous.next = previous;
-            }
-            previous = current;
-            current = current.next;
         }
 
         return false;
