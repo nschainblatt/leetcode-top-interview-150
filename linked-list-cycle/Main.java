@@ -27,13 +27,16 @@ class ListNode {
 
 class Solution {
     public boolean hasCycle(ListNode head) {
-        Set<ListNode> set = new HashSet<>();
-
         ListNode current = head;
+        ListNode previous = null; // NOTE: we need the previous because we don't want to overwrite current.next
         while (current != null) {
-            if (!set.add(current)) {
+            if (current == current.next) {
                 return true;
             }
+            if (previous != null) {
+                previous.next = previous;
+            }
+            previous = current;
             current = current.next;
         }
 
