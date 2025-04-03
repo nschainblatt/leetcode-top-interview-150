@@ -12,69 +12,19 @@ class Solution {
 	public String addBinary(String a, String b) {
 		StringBuilder s = new StringBuilder();
 
-		int i = a.length() - 1;
-		int j = b.length() - 1;
+
+		// NOTE: have to reverse to get the least significant bit to line up for addition.
+		a = new StringBuilder(a).reverse().toString();
+		b = new StringBuilder(b).reverse().toString();
+
 		int carry = 0;
-		while (i >= 0 && j >= 0) {
+		for (int i = 0; i < Math.max(a.length(), b.length()); i++) {
+			int ac = i < a.length() ? a.charAt(i) - '0' : 0;
+			int bc = i < b.length() ? b.charAt(i) - '0' : 0;
 
-			char ac = a.charAt(i);
-			char bc = b.charAt(j);
-
-			if (ac == '1' && bc == '1') {
-				if (carry == 1) {
-					s.append('1');
-				} else {
-					s.append('0');
-				}
-				carry = 1;
-			} else if (ac == '0' && bc == '0') {
-				if (carry == 1) {
-					s.append('1');
-				} else {
-					s.append('0');
-				}
-				carry = 0;
-			} else {
-				if (carry == 1) {
-					s.append('0');
-					carry = 1;
-				} else {
-					s.append('1');
-					carry = 0;
-				}
-			}
-
-			i--;
-			j--;
-		}
-
-		while (i >= 0) {
-			char ac = a.charAt(i);
-			if (carry == 1) {
-				if (ac == '1') {
-					s.append('0');
-				} else {
-					s.append('1');
-					carry = 0;
-				}
-			} else {
-				s.append(ac);
-			}
-			i--;
-		}
-		while (j >= 0) {
-			char bc = b.charAt(j);
-			if (carry == 1) {
-				if (bc == '1') {
-					s.append('0');
-				} else {
-					s.append('1');
-					carry = 0;
-				}
-			} else {
-				s.append(bc);
-			}
-			j--;
+			int total = ac + bc + carry;
+			s.append(Integer.toString(total % 2));
+			carry = total / 2;
 		}
 
 		if (carry == 1) {
