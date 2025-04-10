@@ -2,16 +2,24 @@ import re
 
 class Solution(object):
     def isPalindrome(self, s):
-        s = re.sub("[^a-z0-9]*", "", s.lower())
         left = 0
         right = len(s) - 1
         while left < right:
-            if s[left] != s[right]:
+            if not is_character_or_number(s[left]):
+                left+=1
+            elif not is_character_or_number(s[right]):
+                right-=1
+            elif s[left].lower() != s[right].lower():
                 return False
-            left+=1
-            right-=1
+            else:
+                left+=1
+                right-=1
 
         return True
+
+
+def is_character_or_number(s):
+    return re.match("[A-Za-z0-9]", s)
 
 def main():
     s = Solution()
