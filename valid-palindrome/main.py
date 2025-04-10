@@ -19,7 +19,8 @@ class Solution(object):
 
 
 def is_character_or_number(s):
-    return re.match("[A-Za-z0-9]", s)
+    i = ord(s.lower())
+    return 48 <= i <= 57 or 97 <= i <= 122
 
 def main():
     s = Solution()
