@@ -7,6 +7,8 @@ class Solution(object):
         """
         if not s:
             return True
+        if len(s) > len(t):
+            return False
 
         s_pointer = 0
         for c in t:
