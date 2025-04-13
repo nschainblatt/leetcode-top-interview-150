@@ -16,7 +16,7 @@ class Solution(object):
                 max = volume
             if min_value == height[l]:
                 l+=1
-            elif min_value == height[r]:
+            else:
                 r-=1
 
         return max
