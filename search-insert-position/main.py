@@ -11,19 +11,20 @@ class Solution(object):
         if len(nums) == 1:
             return 0 if target <= nums[0] else 1
 
-        # Binary search
-        l, r = 0, len(nums) - 1
-        while l <= r:
-            m = (r + l) // 2
+        return binary_search(nums, target, 0, len(nums) - 1)
 
-            if (target < nums[m]):
-                r = m-1
-            elif (target > nums[m]):
-                l = m+1
-            else:
-                return m
 
+def binary_search(nums, target, l, r):
+    if l > r:
         return r + 1
+    m = (r + l) // 2
+    if nums[m] > target:
+        r = m - 1
+    elif nums[m] < target:
+        l = m + 1
+    else:
+        return m
+    return binary_search(nums, target, l, r)
 
 
 def main():
