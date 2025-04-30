@@ -1,4 +1,5 @@
-import math
+SIGNED_INT_MIN = -1 * (1 << 31)
+SIGNED_INT_MAX = (1 << 31) - 1
 
 
 class Solution(object):
@@ -7,18 +8,22 @@ class Solution(object):
         :type x: int
         :rtype: int
         """
+        reversed_int_string = str(x)[::-1]
+        reversed_int_string = fix_trailing_sign(
+            reversed_int_string)
+        reversed_x = int(reversed_int_string)
 
-        x_str_rev = str(x)[::-1]
-        if x_str_rev[-1] == '-':
-            x_str_rev = '-' + x_str_rev[:-1]
-
-        x_int = int(x_str_rev)
-
-        return x_int if is_32_bit_signed_int(x_int) else 0
+        return reversed_x if is_32_bit_signed_int(reversed_x) else 0
 
 
 def is_32_bit_signed_int(x):
-    return int(-1 * math.pow(2, 31)) <= x <= int(math.pow(2, 31) - 1)
+    return SIGNED_INT_MIN <= x <= SIGNED_INT_MAX
+
+
+def fix_trailing_sign(s):
+    if s[-1] == '-':
+        s = '-' + s[:-1]
+    return s
 
 
 def main():
