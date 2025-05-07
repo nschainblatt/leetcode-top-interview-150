@@ -1,121 +1,81 @@
 import java.util.*;
 
-// TODO:
-// Next step is to optimize the load factor:
-// Increase the size of the underlying array whenever the load factor gets too high, you will also have to rehash every element becuase
-// the ArrayList size changes.
-// Improve the getRandom method by including probabilities between buckets (buckets with higher number of elements have a higher chance of getting randomly selected), I am not sure how much this part matters, we may be able to get away with just randomly choosing a bucket that isn't random, and then randomly choosing a element in that bucket.
-
 public class Main {
 	public static void main(String[] args) {
 
 		RandomizedSet obj = new RandomizedSet();
 
-		//boolean param_1 = obj.insert(1);
-		//boolean param_2 = obj.remove(2);
-		//boolean param_3 = obj.insert(2);
-		//int param_4 = obj.getRandom();
-		//boolean param_5 = obj.remove(1);
-		//boolean param_6 = obj.insert(2);
-		//int param_7 = obj.getRandom();
-
-		//assert param_1;
-		//assert !param_2;
-		//assert param_3;
-		//assert param_5;
-		//assert !param_6;
-
-		assert obj.insert(1);
-		assert obj.insert(2);
-		assert obj.insert(3);
-		assert obj.insert(4);
-		assert obj.insert(5);
-		assert obj.insert(6);
-		assert obj.insert(7);
-
+		for (int i = 100; i > 0; i--) {
+			if (i % 10 == 0) {
+				obj.print();
+			}
+			assert obj.insert(i);
+		}
 		assert obj.insert(-1);
 		obj.print();
 
-
+		assert obj.contains(-1);
+		assert obj.contains(100);
+		obj.print();
+		assert obj.remove(100);
+		assert obj.remove(-1);
+		assert !obj.contains(100);
+		assert !obj.contains(-1);
+		obj.print();
 
 		System.out.println(obj.getRandom());
 
 	}
 }
 
+// Hash Map and a List
+// Hash map key is the value being inserted, the value is the index it is being
+// added to in the list
+// When removing an item, swap the index to remove with the last item in the
+// list, and then finally delete the last element in the list
+// to achieve removal in constant time.
 
 class RandomizedSet {
 
-	private final List<List<Integer>> bucketHolder = new ArrayList<>();
-	private final int defaultSize = 16;
+	private final Map<Integer, Integer> map = new HashMap<>();
+	private final List<Integer> list = new ArrayList<>();
 	private final Random r = new Random();
 
-	public void print() {
-		System.out.println(bucketHolder);
+	public RandomizedSet() {
 	}
 
-	public RandomizedSet() {
-		for (int i = 0; i < defaultSize; i++) {
-			bucketHolder.add(new ArrayList<>());
-		}
+	public void print() {
+		System.out.printf("MAP: %s, LIST: %s", map, list);
 	}
 
 	public boolean insert(int val) {
-		int hashKey = hashValue(val);
-		List<Integer> bucket = bucketHolder.get(hashKey);
-		for (int num : bucket) {
-			if (num == val) {
-				return false;
-			}
+		if (map.containsKey(val)) {
+			return false;
 		}
-		bucket.add(val);
+		int index = list.size(); // This is the future index it will be in the list
+		list.add(val);
+		map.put(val, index);
 		return true;
 	}
 
 	public boolean remove(int val) {
-		int hashKey = hashValue(val);
-		List<Integer> bucket = bucketHolder.get(hashKey);
-		for (int i = 0; i < bucket.size(); i++) {
-			if (bucket.get(i) == val) {
-				bucket.remove(i);
-				return true;
-			}
+		if (map.containsKey(val) && !list.isEmpty()) {
+			int index = map.get(val);
+			int lastVal = list.get(list.size() - 1);
+			list.set(index, lastVal);
+			map.put(lastVal, index);
+			list.remove(list.size() - 1);
+			map.remove(val);
+			return true;
 		}
 		return false;
 	}
 
 	public boolean contains(int val) {
-		int hashKey = hashValue(val);
-		List<Integer> bucket = bucketHolder.get(hashKey);
-		for (int num : bucket) {
-			if (num == val) {
-				return true;
-			}
-		}
-		return false;
+		return map.containsKey(val);
 	}
 
 	public int getRandom() {
-		List<Integer> bucket;
-		while (true) {
-			int randomBucketIndex = r.nextInt(bucketHolder.size());
-			List<Integer> randomBucket = bucketHolder.get(randomBucketIndex);
-			if (randomBucket.isEmpty()) {
-				continue;
-			} else {
-				bucket = randomBucket;
-				break;
-			}
-		}
-		int randomIndex = r.nextInt(bucket.size());
-		return bucket.get(randomIndex);
-	}
-
-	private int hashValue(int value) {
-		while (value < 0) {
-			value += bucketHolder.size();
-		}
-		return value % bucketHolder.size();
+		return list.get(r.nextInt(list.size()));
 	}
 }
-
